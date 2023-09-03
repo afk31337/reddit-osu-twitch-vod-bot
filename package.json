@@ -1,0 +1,22 @@
+{
+  "name": "osu-twitch-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "axios": "^0.27.2"
+  },
+  "dependencies": {
+    "moment": "^2.29.4",
+    "mysql": "^2.18.1",
+    "node-stream-zip": "^1.15.0",
+    "sqlite": "^4.1.2",
+    "sqlite3": "^5.1.4"
+  }
+}

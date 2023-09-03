@@ -1,0 +1,31 @@
+{
+  "reddit": {
+    "api": {
+      "username": "",
+      "password": "",
+      "appId": "",
+      "appSecret": "",
+      "userAgent": "RedditOsuTwitchVodBot/2.0"
+    },
+    "limit": 5,
+    "debug_thread_id": null
+  },
+  "osu": {
+    "api": {
+      "client_id": "",
+      "client_secret": ""
+    },
+    "limit": 15
+  },
+  "twitch": {
+    "api": {
+      "client_id": "",
+      "client_secret": ""
+    },
+    "timeOffset": 0,
+    "vod_queue_update_frequency": 300,
+    "vod_track_expiration_hours": 12
+  },
+  "update_frequency":  60,
+  "source_code_url": "https://github.com/afk31337/reddit-osu-twitch-vod-bot"
+}
