@@ -1,14 +1,14 @@
 {
-  "name": "osu-twitch-bot",
-  "version": "1.0.0",
+  "name": "reddit-osu-twitch-vod-bot",
+  "version": "2.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "axios": "^0.27.2"
   },

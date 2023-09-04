@@ -3,3 +3,4 @@ config.json
 private.sqlite
 /temp/**
 .idea
+/package-lock.json
