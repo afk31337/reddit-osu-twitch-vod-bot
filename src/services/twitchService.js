@@ -37,7 +37,7 @@ class TwitchService extends Service {
                     videos.push(score);
                 }
             } else {
-                await this.axios.get('https://api.twitch.tv/helix/videos?user_id=' + score.player.twitch_id, this.headers).then(async (res) => {
+                await this.axios.get('https://api.twitch.tv/helix/videos?type=archive&user_id=' + score.player.twitch_id, this.headers).then(async (res) => {
                     let found = false;
                     let lastStreamDate = null;
 
@@ -159,7 +159,7 @@ class TwitchService extends Service {
             const groupedVods = this.privateDB.groupBy(vods, 'twitch_id');
 
             for (let twitch_id of Object.keys(groupedVods)) {
-                await this.axios.get('https://api.twitch.tv/helix/videos?user_id=' + twitch_id, this.headers).then(async (res) => {
+                await this.axios.get('https://api.twitch.tv/helix/videos?type=archive&user_id=' + twitch_id, this.headers).then(async (res) => {
                     for (let vodQueue of groupedVods[twitch_id]) {
                         for (let video of res.data.data) {
                             const vodData = this.getVodData(moment(vodQueue.timestamp), video);

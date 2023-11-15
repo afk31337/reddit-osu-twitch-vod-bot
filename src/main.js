@@ -100,6 +100,12 @@ async function processCommands(redditApi, osuApi, twitchApi) {
                 }
             }
         }
+    } else if (process.argv[2] === 'history:delete') {
+        if (!process.argv[3]) {
+            osuApi.print('usage: history:delete {comment_id}');
+        } else {
+            await osuApi.privateDB.deleteByColumn('history', 'comment_id', process.argv[3]);
+        }
     }
 }
 

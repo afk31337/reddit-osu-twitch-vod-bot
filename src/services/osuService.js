@@ -37,7 +37,10 @@ class OsuService extends Service {
                 comment.comment.duplicateId = duplicate.comment.id;
                 scores.push(comment);
             } else {
-                await axios.get('https://osu.ppy.sh/api/v2/users/' + comment.player.osu_id + '/scores/recent?mode=osu&limit=8', this.headers).then(async (res) => {
+                await axios.get(
+                    'https://osu.ppy.sh/api/v2/users/' + comment.player.osu_id + '/scores/recent?mode=osu&limit=' + config.osu.limit,
+                    this.headers
+                ).then(async (res) => {
                     let found = false;
 
                     if (res.data.length) {
