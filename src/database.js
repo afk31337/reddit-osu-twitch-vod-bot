@@ -58,7 +58,7 @@ class DB {
         const keys = this.getKeys(data).join(', ');
         const placeholder = Object.keys(data).map(() => '?').join(', ');
 
-        await this.database.run(`INSERT INTO ${table} (${keys}) VALUES (${placeholder})`, Object.values(data)).then((result) => {
+        return await this.database.run(`INSERT INTO ${table} (${keys}) VALUES (${placeholder})`, Object.values(data)).then((result) => {
             return result;
         }).catch(this.onError);
     }
@@ -78,7 +78,7 @@ class DB {
         column = this.sanitizeString(column);
         const keys = this.getKeys(data).join(' = ?, ') + ' = ?';
 
-        await this.database.run(`UPDATE ${table} SET ${keys} WHERE ${column} = ?`, Object.values(data).concat(value)).then((result) => {
+        return await this.database.run(`UPDATE ${table} SET ${keys} WHERE ${column} = ?`, Object.values(data).concat(value)).then((result) => {
             return result;
         });
     }
@@ -91,7 +91,7 @@ class DB {
         table = this.sanitizeString(table);
         column = this.sanitizeString(column);
 
-        await this.database.run(`DELETE FROM ${table} WHERE ${column} = ?`, value).then((result) => {
+        return await this.database.run(`DELETE FROM ${table} WHERE ${column} = ?`, value).then((result) => {
             return result;
         });
     }

@@ -50,7 +50,7 @@ class OsuService extends Service {
                     for (const score of res.data) {
                         if (score['beatmap']['id'] === comment.beatMapId) {
                             if (!comment.accuracy || this.accuracyMatches(score['accuracy'] * 100, comment.accuracy)) {
-                                comment.timings = await this.getTimings(comment, score);
+                                comment.timings = await this.getTimings(score);
                                 comment.score_id = score['id'];
 
                                 found = true;
@@ -74,6 +74,48 @@ class OsuService extends Service {
         return scores;
     }
 
+    async getScore(score) {
+        const history = await this.privateDB.findByColumn('logs', 'score_id', score.scoreId);
+        if (history && history.message.startsWith('https://www.twitch.tv')) {
+            score.replyMessage = history.message;
+            return score;
+        }
+
+        await this.buildHeaders();
+
+        return await axios.get('https://osu.ppy.sh/api/v2/scores/' + score.scoreId, this.headers).then(async (res) => {
+            const result = res.data;
+
+            const player = await this.publicDB.findByColumn('players', 'osu_id', result.user.id);
+            if (!player) {
+                score.replyMessage = `Player ${result.user.username} is not tracked`;
+                return score;
+            }
+
+            score.player = player;
+            score.timings = await this.getTimings(result);
+            return score;
+        }).catch(async () => {
+            score.replyMessage = 'Score not found';
+            return score;
+        });
+    }
+
+    parseScoreId(scoreId) {
+        scoreId = scoreId.replace('https://', '');
+        scoreId = scoreId.replace('osu.ppy.sh/scores/', '');
+
+        const isOsu = scoreId.startsWith('osu/');
+
+        scoreId = scoreId.replace(/\D/g, '');
+
+        if (scoreId.length > 20) {
+            return null;
+        }
+
+        return isOsu ? 'osu/' + scoreId : scoreId;
+    }
+
     async checkIfNameChanged(comment, username) {
         if (comment.player.osu_name !== username && await this.publicDB.find('players', comment.player.id).osu_name !== username) {
             await this.publicDB.update('players', comment.player.id, {osu_name: username});
@@ -81,7 +123,7 @@ class OsuService extends Service {
         }
     }
 
-    async getTimings(comment, score) {
+    async getTimings(score) {
         const beatmapID = score.beatmap.id;
         let mapLength = score.beatmap.hit_length;
         let map = await this.privateDB.find('maps', beatmapID);
@@ -126,8 +168,12 @@ class OsuService extends Service {
 
     //osu api's beatmap_length includes skippable intros which players usually skip and that messes up the timings so we have to download the map to get more accurate map length
     async downloadMap(beatmapSetID, beatmapID, version) {
-        this.print('downloading mapset:' + beatmapSetID);
-        return await axios.get('https://api.chimu.moe/v1/download/' + beatmapSetID, {responseType: 'arraybuffer'}).then(async (res) => {
+        if (!config.osu.beatmap_download_url) {
+            return;
+        }
+
+        this.print('downloading mapset: ' + beatmapSetID);
+        return await axios.get(config.osu.beatmap_download_url + beatmapSetID, {responseType: 'arraybuffer'}).then(async (res) => {
             await fs.writeFileSync(`./temp/${beatmapSetID}.osz`, res.data);
             const zip = new streamZip({ file: `./temp/${beatmapSetID}.osz` });
 

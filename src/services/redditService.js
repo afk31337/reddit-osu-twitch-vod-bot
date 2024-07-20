@@ -58,10 +58,15 @@ class RedditService extends Service {
                                 }
                             });
                         } else {
-                            await this.log('player is not tracked', comment.id, comment.link_id, playerId);
+                            await this.log(
+                                `player ${comment.link_title.split('|')[0].trim()} is not tracked`,
+                                comment.id,
+                                comment.link_id,
+                                playerId
+                            );
                         }
                     } else {
-                        await this.log('not a score post or data is missing', comment.id);
+                        await this.log('not a score post or data is missing', comment.id, comment.link_id);
                     }
                 }
             }

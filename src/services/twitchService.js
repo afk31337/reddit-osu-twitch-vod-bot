@@ -85,6 +85,30 @@ class TwitchService extends Service {
         return videos.filter(video => !video.vod.shouldTrack);
     }
 
+    async getVod(score) {
+        await this.axios.get('https://api.twitch.tv/helix/videos?type=archive&user_id=' + score.player.twitch_id, this.headers).then(async (res) => {
+            let found = false;
+
+            if (res.data.data.length) {
+                await this.checkIfNameChanged(score, res.data.data[0].user_login);
+            }
+
+            for (let vod of res.data.data) {
+                score.vod = this.getVodData(score.timings.startTime, vod);
+                if (score.vod) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                score.replyMessage = 'Vod not found';
+            }
+
+            return score;
+        });
+    }
+
     async checkIfNameChanged(score, username) {
         if (score.player.twitch_name !== username && await this.publicDB.find('players', score.player.id).twitch_name !== username) {
             await this.publicDB.update('players', score.player.id, {twitch_name: username});

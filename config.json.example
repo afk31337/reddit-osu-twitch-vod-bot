@@ -5,7 +5,7 @@
       "password": "",
       "appId": "",
       "appSecret": "",
-      "userAgent": "RedditOsuTwitchVodBot/2.0"
+      "userAgent": "RedditOsuTwitchVodBot/2.1"
     },
     "limit": 5,
     "debug_thread_id": null
@@ -15,6 +15,7 @@
       "client_id": "",
       "client_secret": ""
     },
+    "beatmap_download_url": "https://catboy.best/d/",
     "limit": 15
   },
   "twitch": {
@@ -26,6 +27,16 @@
     "vod_queue_update_frequency": 300,
     "vod_track_expiration_hours": 12
   },
+  "discord": {
+      "api": {
+        "token": null,
+        "clientId": null
+      },
+      "guildIds": [],
+      "adminIds": [],
+      "creatorId": "",
+      "commandSymbol": "!"
+    },
   "update_frequency":  60,
   "source_code_url": "https://github.com/afk31337/reddit-osu-twitch-vod-bot"
 }

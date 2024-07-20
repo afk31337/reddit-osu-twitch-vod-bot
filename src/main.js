@@ -25,6 +25,10 @@ async function start() {
     const twitchApi = new twitchService(publicDB, privateDB);
     await twitchApi.buildHeaders();
 
+    const discordService = require('./services/discordService');
+    const discordApi = new discordService(publicDB, privateDB);
+    await discordApi.setup(redditApi, osuApi, twitchApi);
+
     await processCommands(redditApi, osuApi, twitchApi);
 
     while(true) {
@@ -45,6 +49,7 @@ async function start() {
         }
 
         const queuedVods = await twitchApi.getVodQueue();
+
         if (queuedVods.length) {
             await redditApi.postComments(queuedVods);
         }
@@ -112,7 +117,9 @@ async function processCommands(redditApi, osuApi, twitchApi) {
 process.on('unhandledRejection', (error) => {
     console.error(error);
     console.log('exiting...');
-    process.exit(1);
+    setTimeout(() => {
+        process.exit(1);
+    }, 2000)
 });
 
 start();

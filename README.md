@@ -32,4 +32,8 @@ Send me a dm on [/u/afk1337](https://www.reddit.com/message/compose?to=u/afk1337
 - If you need to make changes to the database you can edit the `private.sqlite` and `public.sqlite` files
 
 ### Commands
-**Add player:** run `node main.js player:add <osu_id> <twitch_name>`
+- **Add player:** run `node main.js player:add <osu_id> <twitch_name>`
+- **Delete history entry:** run `node main.js history:delete {comment_id}`
+
+### Discord
+Discord integration can be optionally enabled to make bot management easier using commands and to receive error notifications.

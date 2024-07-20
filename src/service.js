@@ -1,5 +1,6 @@
 const moment = require('moment');
 const axios = require('axios');
+const logs = [];
 
 class Service {
     constructor(name, publicDB, privateDB) {
@@ -72,10 +73,21 @@ class Service {
     }
 
     print(message) {
+        message = `${moment().format('YYYY-MM-DD HH:mm:ss')}: ${message}`;
+        logs.push(message);
+
+        if (logs.length > 20) {
+            logs.shift();
+        }
+
         process.stdout.clearLine(0);
         process.stdout.cursorTo(0);
-        process.stdout.write(`${moment().format('YYYY-MM-DD HH:mm:ss')}: ${message}\n`);
+        process.stdout.write(`${message}\n`);
         process.stdout.write(`${this.privateDB.data.status}...`);
+    }
+
+    getLogs() {
+        return logs;
     }
 }
 
