@@ -11,7 +11,7 @@ module.exports = {
             return chatCommand.missingParams(message);
         }
 
-        scoreId = this.apis.osuApi.parseScoreId(scoreId);
+        scoreId = apis.osuApi.parseScoreId(scoreId);
 
         if (!scoreId) {
             message.reply('Invalid score id or url');

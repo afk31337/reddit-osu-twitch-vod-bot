@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('node:path');
+this.ReadableStream = require('node:stream/web');
 let config = {};
 
 async function start() {
